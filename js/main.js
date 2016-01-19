@@ -3,7 +3,7 @@ require.config({
         "knockout": "ext/knockout",
         "jquery": "ext/jquery.min",
         "text": "ext/text",
-        "codemirror": "ext/codemirror",
+        "formstyler": "ext/jquery.formstyler.min",
         "bootstrap": "../lib/bootstrap/dist/js/bootstrap.min"
     },
     shim: {
@@ -11,7 +11,7 @@ require.config({
     }
 });
 
-require(["knockout", "app", "jquery", "bootstrap", "utilities", "stringTemplateEngine", "text", "codemirror"], function(ko, App, $) {
+require(["knockout", "app", "jquery", "bootstrap", "utilities", "stringTemplateEngine", "text", "formstyler"], function(ko, App, $) {
     var vm = new App();
 
     //simple client-side routing - update hash when current section is changed
@@ -29,16 +29,10 @@ require(["knockout", "app", "jquery", "bootstrap", "utilities", "stringTemplateE
     //initialize
     updateSection();
 
-    //block alt navigation
-    $(document).keydown(function(event) {
-        if (event.altKey && (event.keyCode === 37 || event.keyCode === 38 || event.keyCode === 39 || event.keyCode === 40)) {
-            return false;
-        }
+    jQuery(document).ready(function($) {
+        $('.select_c select').styler();
     });
 
-    window.alert = function(text) {
-      $("#alert .modal-body").html("<p>" + text + "</p>").parent().modal();
-    };
 
     ko.applyBindings(vm);
 });

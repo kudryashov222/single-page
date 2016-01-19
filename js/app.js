@@ -4,23 +4,24 @@
         var self = this;
 
         this.sections = ko.observableArray([
-            new Section("intro"),
-            new Section("points"),
-            new Section("one", "sample"),
-            new Section("two", "sample"),
-            new Section("bye")
+            new Section("Home"),
+            new Section("Gallery"),
+            // new Section("one", "sample"),
+            // new Section("two", "sample"),
+            new Section("Clients")
         ]);
 
         this.updateSection = function(name) {
             var newIndex, i, length, sections = self.sections();
-
             for (i = 0, length = sections.length; i < length; i++) {
                 if (sections[i].name === name) {
                     newIndex = i;
                     break;
                 }
             }
-
+            setTimeout(function() {
+                  $('input, select').styler();
+              }, 10)
             self.index(newIndex === undefined ? 0 : newIndex);
         };
 
@@ -28,6 +29,7 @@
         this.currentSection = ko.computed(function() {
             var newSection = self.sections()[self.index()];
             newSection.activate();
+            $('.select_c select').styler();
             return newSection;
         });
 
