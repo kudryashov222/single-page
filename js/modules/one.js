@@ -1,12 +1,28 @@
-define(["knockout", "sample"], function(ko, Sample) {
+define(["knockout"], function(ko) {
+    return function() {
+        this.title = "Hit Alt+Down now";
+        this.allPoints = [
+            { title: "Point one"},
+            { title: "Point two"},
+            { title: "Point three"},
+            { title: "Point four"},
+            { title: "Alt+Right will move to next section"}
+        ];
 
-    return new Sample("Code Sample One", "one", [
-        new Sample.State("Some code","code"),
-        new Sample.State("Hide output","no-output", { hideResult: true }),
-        new Sample.State("Hide output and HTML", "just-js", { hideResult: true, hideHtml: true }),
-        new Sample.State("Load some JS/HTML not as code sample", "not-sample", { loadAsSection: true }),
-        new Sample.State("More code", "more"),
-        new Sample.State("More code", "more2")
-    ], true);  //this last true tells it to load each sample immediately when moving to it
+        this.points = ko.observableArray();
 
+        //add the top point to the list of displayed points
+        this.next = function() {
+            if (this.allPoints.length) {
+                this.points.push(this.allPoints.shift());
+            }
+        };
+
+        //step back
+        this.previous = function() {
+            if (this.points().length) {
+                this.allPoints.unshift(this.points.pop());
+            }
+        };
+    };
 });

@@ -2,64 +2,56 @@
     window.ko = ko;
     return function() {
         var self = this;
+        var flag = true;
 
         this.sections = ko.observableArray([
             new Section("Home"),
             new Section("Gallery"),
-            // new Section("one", "sample"),
-            // new Section("two", "sample"),
             new Section("Clients")
+        ]);
+
+        this.sectionsJ = ko.observableArray([
+            new Section("one")
         ]);
 
         this.updateSection = function(name) {
             var newIndex, i, length, sections = self.sections();
+
             for (i = 0, length = sections.length; i < length; i++) {
                 if (sections[i].name === name) {
                     newIndex = i;
                     break;
                 }
             }
+            if (!flag) {
+                newIndex = 3;
+            }
             setTimeout(function() {
-                  $('input, select').styler();
+                  $('.select_c select').styler();
               }, 10)
+            flag = true;
             self.index(newIndex === undefined ? 0 : newIndex);
         };
 
         this.index = ko.observable(0);
         this.currentSection = ko.computed(function() {
             var newSection = self.sections()[self.index()];
+            if (!flag) {
+                var newSection = new Section("one");
+            }
             newSection.activate();
-            $('.select_c select').styler();
             return newSection;
         });
 
-        //go forward unless we are at the end
-        this.goNext = function() {
-            var index = self.index(),
-                newIndex = (index === self.sections().length - 1) ? index : index + 1;
-
-            location.hash = self.sections()[newIndex].name;
+        this.goItem = function() {
+            flag = false;
+            self.index(3);
+            $('.nav a').removeClass('selected');
+            $('.modal-backdrop').remove();
         };
 
-        //go back unless we are at the beginning
-        this.goPrevious = function() {
+        this.modalOpen = function() {
             $('#Callback').modal();
-        };
-
-        //if the current page has steps, then go forward
-        this.stepNext = function() {
-            var data = this.currentSection().data();
-            if (data.next) {
-                return data.next.call(data);
-            }
-        };
-
-        //if the current page has steps, then go back
-        this.stepPrevious = function() {
-            var data = this.currentSection().data();
-            if (data.previous) {
-                return data.previous.call(data);
-            }
         };
     };
 });
